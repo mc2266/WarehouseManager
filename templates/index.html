@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <h1>Inventory Manager</h1>
+    </head>
+
+    <body> 
+        <!-- Add warehouse form -->
+        <form class="grid" action="\add_warehouse" method="POST">
+            <div>
+                <label for="Name">Add Warehouse:</label>
+            </div>
+            <div>
+                <input type="text" name="warehouse_name" placeholder="Warehouse Name">
+                <input type="checkbox" name="copy_items">
+                <label for="copy_items">Copy item types from current warehouse</label>
+                <button type="submit" value="submit_button">Add</button>
+            </div>
+        </form>
+        
+        <!-- Add warehouse item -->
+        <form class="grid" action="\add_item" method="POST">
+            <div>
+                <label for="Name">Add item:</label>
+            </div>
+            <div>
+                <input type="text" name="item_name" placeholder="Item Name">
+                <input type="text" name="quantity" placeholder="Quantity">
+                <input type="text" name="other" placeholder="Other Information">
+
+                <button type="submit" value="submit_button">Add</button>
+            </div>
+        </form>
+
+        <!-- Select warehouse form -->
+        <form class="grid" action="\select_warehouse" method="POST">
+            <div>
+                <label>Select Warehouse:</label>
+            </div>
+            <div>
+                {% for warehouse in warehouse_data["warehouses"] %}
+                    <input type="submit" name="submit_button" value="{{warehouse}}">
+                {% endfor %}
+            </div>
+        </form>
+
+        <!-- Delete warehouse form -->
+        <form class="grid" action="\delete_warehouse" method="POST">
+                <button type="submit" value="submit_button">Delete Current Warehouse</button>
+        </form>
+
+        <!-- Form for item data edit if "edit_item_data" is present -->
+        {% if warehouse_data["edit_item_data"]%}
+            <form class="grid" action="\save_edit" method="POST">
+                <input type="text" name="item_name" value="{{warehouse_data['edit_item_data']['name']}}" placeholder="Item Name">
+                <input type="text" name="id" value="{{warehouse_data['edit_item_data']['id']}}" placeholder="Item ID">
+                <input type="text" name="quantity" value="{{warehouse_data['edit_item_data']['quantity']}}" placeholder="Quantity">
+                <input type="text" name="other" value="{{warehouse_data['edit_item_data']['other']}}" placeholder="Other Information">
+
+                <button type="submit" name = "old_id" value="{{warehouse_data['edit_item_data']['id']}}">Save</button>
+            </form>
+        {% endif %}
+        
+        <!-- Display Error message if current state has an error.-->
+        <div>
+            {% if warehouse_data["error_message"] %}
+                <label>Error: {{warehouse_data["error_message"]}}</label>
+            {% endif %}
+        </div>
+        
+        <!-- Forms for edit quantity, edit item, delete item buttons in list -->
+        <form id="edit_quantity" action="\edit_quantity" method="POST"></form>
+        <form id="edit_item" action="\edit_item" method="POST"></form>
+        <form id="delete_item" action="\delete_item" method="POST"></form>
+
+        <!-- Display warehouse information-->
+        <div>
+            {% if not warehouse_data["current_warehouse"] %}
+                <h2>Add or select a warehouse to view items.</h2>
+            {% else %}
+                <h2> Items in {{warehouse_data["current_warehouse"]}}: </h2>
+                {% if warehouse_data["items"] %}
+                    <table>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Item ID</th>
+                            <th>Quantity</th>
+                            <th>Other Information</th>
+                        </tr>
+                        {% for item_data in warehouse_data["items"] %}
+                            <tr>
+                                <td>{{item_data[0]}}</td>
+                                <td>{{item_data[1]}}</td>
+                                <td>{{item_data[2]}}</td>
+                                <td>{{item_data[3]}}</td>
+                                <td><button form="edit_quantity" type="submit" name="submit_button" value="{{item_data[1]}},-10">-10</button></td>
+                                <td><button form="edit_quantity" type="submit" name="submit_button" value="{{item_data[1]}},-1">-1</button></td>
+                                <td><button form="edit_quantity" type="submit" name="submit_button" value="{{item_data[1]}},1">+1</button></td>
+                                <td><button form="edit_quantity" type="submit" name="submit_button" value="{{item_data[1]}},10">+10</button></td>
+                                <td><button form="edit_item" type="submit" name="submit_button" value="{{item_data[1]}}">Edit</button></td>
+                                <td><button form="delete_item" type="submit" name="submit_button" value="{{item_data[1]}}">Delete</button></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <label>The {{warehouse_data["current_warehouse"]}} warehouse is empty!</label>
+                {% endif %}
+            {% endif %}
+        </div>
+
+    </body>
+
+</html>
