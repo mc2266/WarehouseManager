@@ -5,15 +5,15 @@ Python can easily be downloaded from the internet, any python3 version should
 work fine.
 
 To install Flask you first need to install the python installer program (pip).
-You can check if you already have pip with the command "$pip3 help"
+You can check if you already have pip with the command "$ pip3 help"
 If pip responds you can skip this step, otherwise I suggest following the
 pip installation guide at "https://pip.pypa.io/en/stable/installation/"
 
 Once pip is installed, Flask can be added using the command 
-"$pip3 install Flask"
+"$ pip3 install Flask"
 
 Now that Flask is installed, and all the files are in the same folder
-"$python3 app.py" should start the web server. Starting the web server will
+"$ python3 app.py" should start the web server. Starting the web server will
 return a bunch of text. The web server will be hosted at the link next to
 the " *Running on" line ("http://127.0.0.1:5000/"). Pasting this into any 
 modern web browser will take you to the server. The server can be closed using
